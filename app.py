@@ -35,7 +35,7 @@ def dashboard():
     with get_connection() as connection:
         transactions = connection.execute(
             """
-            SELECT type, amount, currency, category, description, transaction_date
+            SELECT id, type, amount, currency, category, description, transaction_date
             FROM transactions
             ORDER BY transaction_date DESC, id DESC
             """
@@ -101,7 +101,15 @@ def add_transaction():
         )
 
     return redirect(url_for("dashboard"))
+@app.route("/transactions/<int:transaction_id>/delete", methods=["POST"])
+def delete_transaction(transaction_id):
+    with get_connection() as connection:
+        connection.execute(
+            "DELETE FROM transactions WHERE id = ?",
+            (transaction_id,),
+        )
 
+    return redirect(url_for("dashboard"))
 
 initialize_database()
 

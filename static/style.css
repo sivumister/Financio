@@ -410,3 +410,16 @@ button:focus-visible {
     gap: 8px;
   }
 }
+.delete-button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #e4c9c6;
+  border-radius: 8px;
+  background: #fff;
+  color: #a4473f;
+  font-size: 0.85rem;
+}
+
+.delete-button:hover {
+  background: #fbefed;
+}

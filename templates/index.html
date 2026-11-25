@@ -102,6 +102,12 @@
         {{ transaction['currency'] }}
         {{ "%.2f"|format(transaction['amount']) }}
       </strong>
+      <form
+      action="{{ url_for('delete_transaction', transaction_id=transaction['id']) }}"
+      method="post"
+    >
+      <button type="submit" class="delete-button">Delete</button>
+    </form>
     </article>
   {% else %}
     <p class="empty-message">No transactions yet</p>
