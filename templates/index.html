@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your wallet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="main-nav" aria-label="Main navigation">
+  <a class="brand" href="/">FinTrack</a>
+
+  <div class="nav-links">
+    <a class="nav-link active" href="#dashboard" aria-current="page">Dashboard</a>
+    <a class="nav-link" href="#transactions">Transactions</a>
+    <a class="nav-link" href="#budgets">Budgets</a>
+    <a class="nav-link" href="#goals">Savings goals</a>
+  </div>
+</nav>
+    <header class="page-header" id="dashboard">
+      <div>
+        <p class="eyebrow">PERSONAL FINANCE</p>
+        <h1>Your money, made clearer.</h1>
+        <p class="intro">
+          Record income and expenses, and keep track of your money in USD and ZiG.
+        </p>
+      </div>
+    </header>
+
+    <section class="balance-section" aria-labelledby="balances-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OVERVIEW</p>
+          <h2 id="balances-title">Your balances</h2>
+        </div>
+        <p class="section-note">Each currency is shown separately.</p>
+      </div>
+
+      <div class="balance-grid">
+        <article class="balance-card">
+          <p class="card-label">USD balance</p>
+          <p class="balance-amount">
+  <span class="currency-symbol">$</span>
+  <span id="usd-balance">0.00</span>
+</p>
+          <p class="card-note">Income minus expenses</p>
+        </article>
+
+        <article class="balance-card balance-card-zig">
+          <p class="card-label">ZiG balance</p>
+          <p class="balance-amount">
+  <span class="currency-symbol">ZiG</span>
+  <span id="zig-balance">0.00</span>
+</p>
+          <p class="card-note">Income minus expenses</p>
+        </article>
+      </div>
+    </section>
+    <section class="spending-section" aria-labelledby="spending-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">SPENDING</p>
+      <h2 id="spending-title">Where your money goes</h2>
+    </div>
+
+    <label class="period-control" for="spending-period">
+      <span>Period</span>
+      <select id="spending-period" name="spending_period">
+        <option value="month">This month</option>
+        <option value="week">This week</option>
+        <option value="year">This year</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="spending-grid">
+    <article class="spending-card">
+      <h3>Spending by category</h3>
+      <p class="card-note">Your expense breakdown will appear here.</p>
+      <div
+        class="chart-placeholder"
+        role="img"
+        aria-label="Spending by category chart placeholder"
+      >
+        <span>Add transactions to see your spending chart</span>
+      </div>
+    </article>
+
+    <article class="spending-card">
+      <h3>Recent transactions</h3>
+      <p class="card-note">Your latest income and expenses will appear here.</p>
+      <div id="transaction-list" class="transaction-list" aria-live="polite">
+  <p class="empty-message">No transactions yet</p>
+</div>
+    </article>
+  </div>
+</section>
+    <section class="transaction-section" id="transactions" aria-labelledby="transaction-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">GET STARTED</p>
+          <h2 id="transaction-title">Add a transaction</h2>
+        </div>
+        <p class="section-note">Enter one income or expense at a time.</p>
+      </div>
+   <form id="transaction-form" action="/submit-form" method="post">
+  <fieldset>
+    <legend>Add a transaction</legend>
+
+    <label for="type">Transaction type</label>
+    <select id="type" name="type" required>
+      <option value="">Choose income or expense</option>
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+
+    <label for="amount">Amount</label>
+    <input
+      type="number"
+      id="amount"
+      name="amount"
+      min="0.01"
+      step="0.01"
+      inputmode="decimal"
+      required
+    >
+
+    <label for="currency">Currency</label>
+    <select id="currency" name="currency" required>
+      <option value="">Choose a currency</option>
+      <option value="USD">USD</option>
+      <option value="ZiG">ZiG</option>
+    </select>
+
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+      <option value="">Choose a category</option>
+      <option value="salary">Salary</option>
+      <option value="allowance">Allowance</option>
+      <option value="other-income">Other income</option>
+      <option value="food">Food</option>
+      <option value="accommodation">Accommodation</option>
+      <option value="transport">Transport</option>
+      <option value="utilities">Utilities</option>
+      <option value="education">Education</option>
+      <option value="health">Health</option>
+      <option value="other-expense">Other expense</option>
+    </select>
+
+    <label for="description">Description</label>
+    <input
+      type="text"
+      id="description"
+      name="description"
+      maxlength="200"
+      placeholder="For example, monthly salary or groceries"
+      required
+    >
+
+    <label for="transaction-date">Date</label>
+    <input
+      type="date"
+      id="transaction-date"
+      name="transaction_date"
+      required
+    >
+
+    <button type="submit">Add transaction</button>
+  </fieldset>
+</form>
+    </section>
+    <section class="placeholder-section" id="budgets" aria-labelledby="budgets-title">
+  <p class="eyebrow">PERSONAL FINANCE</p>
+  <h2 id="budgets-title">Budgets</h2>
+  <p class="card-note">Budget tracking will be added in a later step.</p>
+</section>
+
+<section class="placeholder-section" id="goals" aria-labelledby="goals-title">
+  <p class="eyebrow">PERSONAL FINANCE</p>
+  <h2 id="goals-title">Savings goals</h2>
+  <p class="card-note">Savings goals will be added in a later step.</p>
+</section>
+  </main>
+
+<script>
+  const transactionForm = document.querySelector("#transaction-form");
+  const transactionList = document.querySelector("#transaction-list");
+  const usdBalanceDisplay = document.querySelector("#usd-balance");
+  const zigBalanceDisplay = document.querySelector("#zig-balance");
+
+  const balances = {
+    USD: 0,
+    ZiG: 0,
+  };
+
+  function updateBalanceDisplay(currency) {
+    const display = currency === "USD" ? usdBalanceDisplay : zigBalanceDisplay;
+
+    display.textContent = new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(balances[currency]);
+  }
+  transactionForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(transactionForm);
+    const transaction = {
+      type: formData.get("type"),
+      amount: Number(formData.get("amount")),
+      currency: formData.get("currency"),
+      category: formData.get("category"),
+      description: formData.get("description").trim(),
+      date: formData.get("transaction_date"),
+    };
+
+    if (
+      !transaction.type ||
+      !transaction.amount ||
+      !transaction.currency ||
+      !transaction.category ||
+      !transaction.description ||
+      !transaction.date
+    ) {
+      return;
+    }
+
+    transactionList.querySelector(".empty-message")?.remove();
+
+    const row = document.createElement("article");
+    row.className = `transaction-row ${transaction.type}`;
+
+    const details = document.createElement("div");
+    details.className = "transaction-details";
+
+    const title = document.createElement("strong");
+    title.textContent = transaction.description;
+
+    const meta = document.createElement("span");
+    meta.textContent = `${transaction.category.replaceAll("-", " ")} · ${transaction.date}`;
+
+    const amount = document.createElement("strong");
+    const formattedAmount = new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(transaction.amount);
+    amount.textContent = `${transaction.type === "income" ? "+" : "−"} ${transaction.currency} ${formattedAmount}`;
+
+    details.append(title, meta);
+    row.append(details, amount);
+    transactionList.prepend(row);
+
+    transactionForm.reset();
+    const change = transaction.type === "income"
+      ? transaction.amount
+      : -transaction.amount;
+
+    balances[transaction.currency] += change;
+    updateBalanceDisplay(transaction.currency);
+  });
+</script>
+</body>
+</html>
+ 
