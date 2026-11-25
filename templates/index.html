@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your wallet</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="page-shell">
@@ -42,7 +42,7 @@
           <p class="card-label">USD balance</p>
           <p class="balance-amount">
   <span class="currency-symbol">$</span>
-  <span id="usd-balance">0.00</span>
+<span id="usd-balance">{{ "%.2f"|format(balances['USD']) }}</span>
 </p>
           <p class="card-note">Income minus expenses</p>
         </article>
@@ -51,7 +51,7 @@
           <p class="card-label">ZiG balance</p>
           <p class="balance-amount">
   <span class="currency-symbol">ZiG</span>
-  <span id="zig-balance">0.00</span>
+  <span id="zig-balance">{{ "%.2f"|format(balances['ZiG']) }}</span>
 </p>
           <p class="card-note">Income minus expenses</p>
         </article>
@@ -91,7 +91,21 @@
       <h3>Recent transactions</h3>
       <p class="card-note">Your latest income and expenses will appear here.</p>
       <div id="transaction-list" class="transaction-list" aria-live="polite">
-  <p class="empty-message">No transactions yet</p>
+  {% for transaction in transactions %}
+    <article class="transaction-row {{ transaction['type'] }}">
+      <div class="transaction-details">
+        <strong>{{ transaction['description'] }}</strong>
+        <span>{{ transaction['category']|replace('-', ' ')|title }} · {{ transaction['transaction_date'] }}</span>
+      </div>
+      <strong>
+        {{ '+' if transaction['type'] == 'income' else '−' }}
+        {{ transaction['currency'] }}
+        {{ "%.2f"|format(transaction['amount']) }}
+      </strong>
+    </article>
+  {% else %}
+    <p class="empty-message">No transactions yet</p>
+  {% endfor %}
 </div>
     </article>
   </div>
@@ -104,7 +118,7 @@
         </div>
         <p class="section-note">Enter one income or expense at a time.</p>
       </div>
-   <form id="transaction-form" action="/submit-form" method="post">
+   <form id="transaction-form" action="{{ url_for('add_transaction') }}" method="post">
   <fieldset>
     <legend>Add a transaction</legend>
 
@@ -183,83 +197,6 @@
 </section>
   </main>
 
-<script>
-  const transactionForm = document.querySelector("#transaction-form");
-  const transactionList = document.querySelector("#transaction-list");
-  const usdBalanceDisplay = document.querySelector("#usd-balance");
-  const zigBalanceDisplay = document.querySelector("#zig-balance");
-
-  const balances = {
-    USD: 0,
-    ZiG: 0,
-  };
-
-  function updateBalanceDisplay(currency) {
-    const display = currency === "USD" ? usdBalanceDisplay : zigBalanceDisplay;
-
-    display.textContent = new Intl.NumberFormat(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(balances[currency]);
-  }
-  transactionForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(transactionForm);
-    const transaction = {
-      type: formData.get("type"),
-      amount: Number(formData.get("amount")),
-      currency: formData.get("currency"),
-      category: formData.get("category"),
-      description: formData.get("description").trim(),
-      date: formData.get("transaction_date"),
-    };
-
-    if (
-      !transaction.type ||
-      !transaction.amount ||
-      !transaction.currency ||
-      !transaction.category ||
-      !transaction.description ||
-      !transaction.date
-    ) {
-      return;
-    }
-
-    transactionList.querySelector(".empty-message")?.remove();
-
-    const row = document.createElement("article");
-    row.className = `transaction-row ${transaction.type}`;
-
-    const details = document.createElement("div");
-    details.className = "transaction-details";
-
-    const title = document.createElement("strong");
-    title.textContent = transaction.description;
-
-    const meta = document.createElement("span");
-    meta.textContent = `${transaction.category.replaceAll("-", " ")} · ${transaction.date}`;
-
-    const amount = document.createElement("strong");
-    const formattedAmount = new Intl.NumberFormat(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(transaction.amount);
-    amount.textContent = `${transaction.type === "income" ? "+" : "−"} ${transaction.currency} ${formattedAmount}`;
-
-    details.append(title, meta);
-    row.append(details, amount);
-    transactionList.prepend(row);
-
-    transactionForm.reset();
-    const change = transaction.type === "income"
-      ? transaction.amount
-      : -transaction.amount;
-
-    balances[transaction.currency] += change;
-    updateBalanceDisplay(transaction.currency);
-  });
-</script>
 </body>
 </html>
  
